@@ -1,5 +1,4 @@
 package it.univaq.giocooca;
-
 import java.io.Serializable;
 import java.util.Random;
 

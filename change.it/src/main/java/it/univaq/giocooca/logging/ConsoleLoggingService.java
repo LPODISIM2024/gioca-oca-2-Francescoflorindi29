@@ -7,7 +7,8 @@ public class ConsoleLoggingService implements ILoggingService {
 
     @Override
     public void logAction(String action) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        System.out.println("[" + timestamp + "] " + action);
+        String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        System.out.println("[" + ts + "] " + action);
     }
 }
+

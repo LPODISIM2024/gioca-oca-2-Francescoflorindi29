@@ -11,20 +11,16 @@ public class MinigameServiceImpl implements IMinigameService {
     @Override
     public Player playMorra(Player p1, Player p2) {
         int r = rand.nextInt(3);
-        switch (r) {
-            case 0: return p1; 
-            case 1: return p2; 
-            default: return null; 
-        }
+        if (r == 0) return p1;
+        if (r == 1) return p2;
+        return null;
     }
 
     @Override
     public Player playTris(Player p1, Player p2) {
         int r = rand.nextInt(3);
-        switch (r) {
-            case 0: return p1;
-            case 1: return p2;
-            default: return null;
-        }
+        if (r == 0) return p1;
+        if (r == 1) return p2;
+        return null;
     }
 }

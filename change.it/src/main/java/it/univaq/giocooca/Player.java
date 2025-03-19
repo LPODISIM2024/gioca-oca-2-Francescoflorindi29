@@ -9,22 +9,17 @@ public class Player implements Serializable {
     private int position;
     private boolean blocked;
     private int turnsBlocked;
+    private boolean ai; 
 
-    public Player(String name) {
+
+    public Player(String name, boolean isAI) {
         this.name = name;
+        this.ai = isAI;
         this.position = 0;
         this.blocked = false;
         this.turnsBlocked = 0;
     }
 
-    public void move(int steps, int boardSize) {
-        int newPos = position + steps;
-        if (newPos >= boardSize) {
-            int overshoot = newPos - (boardSize - 1);
-            newPos = (boardSize - 1) - overshoot;
-        }
-        this.position = newPos;
-    }
 
     public String getName() {
         return name;
@@ -36,6 +31,19 @@ public class Player implements Serializable {
 
     public boolean isBlocked() {
         return blocked;
+    }
+
+    public boolean isAI() {
+        return ai;
+    }
+
+    public void move(int steps, int boardSize) {
+        int newPos = position + steps;
+        if (newPos >= boardSize) {
+            int overshoot = newPos - (boardSize - 1);
+            newPos = (boardSize - 1) - overshoot;
+        }
+        this.position = newPos;
     }
 
     public void setBlocked(int turns) {
