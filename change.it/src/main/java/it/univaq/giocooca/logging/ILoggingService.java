@@ -1,5 +1,6 @@
 package it.univaq.giocooca.logging;
 
-public class ILoggingService {
-
+public interface ILoggingService {
+    void logAction(String action);
 }
+
