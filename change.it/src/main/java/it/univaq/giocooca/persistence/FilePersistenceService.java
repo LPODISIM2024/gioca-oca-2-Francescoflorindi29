@@ -7,13 +7,19 @@ import java.io.*;
 
 public class FilePersistenceService implements IPersistenceService {
 
+    private String baseDirectory; // Esempio: "C:\Temp\SavedGamesGOOSE"
+
+    public FilePersistenceService(String baseDirectory) {
+        this.baseDirectory = baseDirectory;
+    }
+
     @Override
     public void saveGame(Game game, String filePath) throws GameException {
         try (FileOutputStream fos = new FileOutputStream(filePath);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(game);
         } catch (IOException e) {
-            throw new GameException("Errore durante il salvataggio su file: " + filePath, e);
+            throw new GameException("Errore salvataggio su " + filePath, e);
         }
     }
 
@@ -23,7 +29,7 @@ public class FilePersistenceService implements IPersistenceService {
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             return (Game) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new GameException("Errore durante il caricamento da file: " + filePath, e);
+            throw new GameException("Errore caricamento da " + filePath, e);
         }
     }
 
@@ -31,10 +37,38 @@ public class FilePersistenceService implements IPersistenceService {
     public void deleteGame(String filePath) throws GameException {
         File f = new File(filePath);
         if (!f.exists()) {
-            throw new GameException("Il file non esiste: " + filePath);
+            throw new GameException("File non esiste: " + filePath);
         }
         if (!f.delete()) {
-            throw new GameException("Impossibile cancellare il file: " + filePath);
+            throw new GameException("Impossibile eliminare: " + filePath);
         }
+    }
+
+    /**
+     * Costruisce un path unico nella baseDirectory
+     * Se esiste già "baseName", aggiunge "-copia1", poi "-copia2", ecc.
+     * Ritorna il path finale.
+     */
+    public String buildUniqueFileName(String baseName) {
+        File dir = new File(baseDirectory);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String nameNoExt = baseName;
+        String ext = "";
+        int dotIndex = baseName.lastIndexOf('.');
+        if (dotIndex >= 0) {
+            nameNoExt = baseName.substring(0, dotIndex);
+            ext = baseName.substring(dotIndex);
+        }
+
+        File candidate = new File(dir, baseName);
+        int copyNum = 1;
+        while (candidate.exists()) {
+            String newName = nameNoExt + "-copia" + copyNum + ext;
+            candidate = new File(dir, newName);
+            copyNum++;
+        }
+        return candidate.getAbsolutePath();
     }
 }

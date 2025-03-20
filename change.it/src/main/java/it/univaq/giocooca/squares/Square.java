@@ -18,6 +18,5 @@ public abstract class Square implements Serializable {
         return index;
     }
 
-
-    public abstract void onLanding(Game game, Player player);
+    public abstract void onLanding(Game game, Player passer);
 }

@@ -9,36 +9,36 @@ public class Player implements Serializable {
     private int position;
     private boolean blocked;
     private int turnsBlocked;
-    private boolean ai; 
+    private boolean ai;
 
-
-    public Player(String name, boolean isAI) {
+    public Player(String name, boolean ai) {
         this.name = name;
-        this.ai = isAI;
+        this.ai = ai;
         this.position = 0;
         this.blocked = false;
         this.turnsBlocked = 0;
     }
 
-
     public String getName() {
         return name;
     }
-
     public int getPosition() {
         return position;
     }
-
     public boolean isBlocked() {
         return blocked;
     }
-
     public boolean isAI() {
         return ai;
     }
 
+    public void setPosition(int newPos) {
+        this.position = newPos;
+    }
+
     public void move(int steps, int boardSize) {
         int newPos = position + steps;
+        // Regola: se superi l'ultima casella, rimbalzi
         if (newPos >= boardSize) {
             int overshoot = newPos - (boardSize - 1);
             newPos = (boardSize - 1) - overshoot;

@@ -7,4 +7,5 @@ public interface IPersistenceService {
     void saveGame(Game game, String filePath) throws GameException;
     Game loadGame(String filePath) throws GameException;
     void deleteGame(String filePath) throws GameException;
+	String buildUniqueFileName(String baseName);
 }

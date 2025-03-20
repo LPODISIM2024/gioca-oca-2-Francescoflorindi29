@@ -19,7 +19,9 @@ public class Board implements Serializable {
     private void initBoard(int size) {
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
+            // % di Morra, % di Tris, % di Locanda, resto Normali
             int r = rand.nextInt(100);
+
             if (r < 10 && i != 0 && i != size - 1) {
                 squares.add(new LocandaSquare(i));
             } else if (r < 20 && i != 0 && i != size - 1) {
@@ -30,6 +32,8 @@ public class Board implements Serializable {
                 squares.add(new NormalSquare(i));
             }
         }
+
+        // Casella 0 e ultima sempre Normal
         squares.set(0, new NormalSquare(0));
         squares.set(size - 1, new NormalSquare(size - 1));
     }
@@ -42,15 +46,16 @@ public class Board implements Serializable {
         return squares.size();
     }
 
+    /**
+     * Stampa a console il tabellone (indice, simbolo, giocatori).
+     */
     public void printBoard(List<Player> players) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < squares.size(); i++) {
             Square s = squares.get(i);
-            
-            String symbol = getSquareSymbol(s);
-
-            String occupant = getPlayersInSquare(i, players);
+            String symbol = getSymbol(s);
+            String occupant = getPlayersHere(players, i);
 
             sb.append("[ ")
               .append(String.format("%2d", i))
@@ -63,32 +68,28 @@ public class Board implements Serializable {
             if (i < squares.size() - 1) {
                 sb.append(" - ");
             }
-
         }
-
         System.out.println("\n=== STATO DEL TABELLONE ===");
         System.out.println(sb.toString());
         System.out.println("===========================");
     }
 
-    private String getSquareSymbol(Square s) {
+    private String getSymbol(Square s) {
         if (s instanceof NormalSquare) return "N";
         if (s instanceof LocandaSquare) return "L";
-        if (s instanceof MorraSquare)  return "M";
-        if (s instanceof TrisSquare)   return "T";
+        if (s instanceof MorraSquare) return "Mo";
+        if (s instanceof TrisSquare)  return "Tr";
+        // Aggiungi altri a piacere
         return "?";
     }
 
-    private String getPlayersInSquare(int index, List<Player> players) {
+    private String getPlayersHere(List<Player> players, int index) {
         List<String> names = new ArrayList<>();
         for (Player p : players) {
             if (p.getPosition() == index) {
                 names.add(p.getName());
             }
         }
-        if (names.isEmpty()) {
-            return "";
-        }
-        return String.join(", ", names);
+        return names.isEmpty() ? "" : String.join(", ", names);
     }
 }
