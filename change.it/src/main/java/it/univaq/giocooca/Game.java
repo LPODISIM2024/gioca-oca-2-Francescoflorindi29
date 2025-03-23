@@ -71,53 +71,58 @@ public class Game implements Serializable {
 	}
 
 	public boolean setupNewGame(Scanner scanner) {
-		System.out.print("Quanti giocatori vuoi creare? (0 per annullare): ");
-		String input = scanner.nextLine();
-		int numPlayers = 0;
-		try {
-			numPlayers = Integer.parseInt(input);
-		} catch (NumberFormatException e) {
-			System.out.println("Opzione non valida! Annullamento configurazione...");
-			return false;
-		}
-		if (numPlayers == 0) {
-			System.out.println("Annullamento configurazione partita...");
-			return false;
-		}
+	    System.out.print("Quanti giocatori vuoi creare? (minimo 2, 0 per annullare): ");
+	    String input = scanner.nextLine();
+	    int numPlayers;
+	    try {
+	        numPlayers = Integer.parseInt(input);
+	    } catch (NumberFormatException e) {
+	        System.out.println("Opzione non valida! Annullamento configurazione...");
+	        return false;
+	    }
 
-		for (int i = 1; i <= numPlayers; i++) {
-			System.out.print("Nome del giocatore " + i + " (o 'annulla' per annullare): ");
-			String name = scanner.nextLine().trim();
-			if (name.equalsIgnoreCase("annulla")) {
-				System.out.println("Configurazione annullata!");
-				return false;
-			}
+	    if (numPlayers == 0) {
+	        System.out.println("Annullamento configurazione partita...");
+	        return false;
+	    }
+	    if (numPlayers < 2) {
+	        System.out.println("Devi avere almeno 2 giocatori! Annullamento configurazione...");
+	        return false;
+	    }
 
-			// Chiediamo se è IA
-			boolean valid = false;
-			boolean isAI = false;
-			while (!valid) {
-				System.out.print("Il giocatore " + i + " è IA? (s/n) : ");
-				String ans = scanner.nextLine().trim().toLowerCase();
-				switch (ans) {
-				case "s":
-					isAI = true;
-					valid = true;
-					break;
-				case "n":
-					isAI = false;
-					valid = true;
-					break;
-				default:
-					System.out.println("Opzione non valida!");
-				}
-			}
+	    for (int i = 1; i <= numPlayers; i++) {
+	        System.out.print("Nome del giocatore " + i + " (o 'annulla' per annullare): ");
+	        String name = scanner.nextLine().trim();
+	        if (name.equalsIgnoreCase("annulla")) {
+	            System.out.println("Configurazione annullata!");
+	            return false;
+	        }
 
-			players.add(new Player(name, isAI));
-		}
-		logger.logAction("Creati " + numPlayers + " giocatori.");
-		return true;
+	        boolean valid = false;
+	        boolean isAI = false;
+	        while (!valid) {
+	            System.out.print("Il giocatore " + i + " è IA? (s/n) : ");
+	            String ans = scanner.nextLine().trim().toLowerCase();
+	            switch (ans) {
+	                case "s":
+	                    isAI = true;
+	                    valid = true;
+	                    break;
+	                case "n":
+	                    isAI = false;
+	                    valid = true;
+	                    break;
+	                default:
+	                    System.out.println("Opzione non valida!");
+	            }
+	        }
+
+	        players.add(new Player(name, isAI));
+	    }
+	    logger.logAction("Creati " + numPlayers + " giocatori.");
+	    return true;
 	}
+
 
 	public void startGame() {
 		while (!gameEnded) {
